@@ -4,6 +4,14 @@
 # Models
 models/
 
+#extras
+bin/
+etc/
+include/
+lib64
+pyvenv.cfg
+share/
+
 # Local Chroma db
 .chroma/
 db/
