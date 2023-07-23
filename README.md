@@ -13,7 +13,7 @@ pip3 install -r requirements.txt
 ```
 
 # Environment Setup for GPU
-Note: The Cuda toolkit needs to be installed prior to running this commands.
+Note: The Cuda toolkit needs to be installed prior to running these commands.
 ```shell
 pip3 install -r requirements.txt
 pip uninstall llama-cpp-python
@@ -21,13 +21,13 @@ CMAKE_ARGS="-DLLAMA_CUBLAS=on" FORCE_CMAKE=1 pip install llama-cpp-python --no-c
 ```
 
 If you have trouble with GPU support not being added, run the last command with '--verbose' to 
-see if its detecting you Cuda toolkit.
+see if its detecting your Cuda toolkit.
 
 
 Then, download the LLM model and place it in a directory of your choice:
 - LLM: for CPU inference [ggml-gpt4all-j-v1.3-groovy.bin](https://gpt4all.io/models/ggml-gpt4all-j-v1.3-groovy.bin). If you prefer a different GPT4All-J compatible model, just download it and reference it in your `.env` file.
 
-- LLM: for GPU inference [koala-7B.ggmlv3.q2_K.bin] (https://huggingface.co/TheBloke/koala-7B-GGML/blob/main/koala-7B.ggmlv3.q2_K.bin), If you prefer a differnt LLama Model, just download it and reference it in your '.env' file.
+- LLM: for GPU inference [koala-7B.ggmlv3.q2_K.bin](https://huggingface.co/TheBloke/koala-7B-GGML/blob/main/koala-7B.ggmlv3.q2_K.bin), If you prefer a differnt LLama Model, just download it and reference it in your '.env' file.
 
 Rename `example.env` to `.env` and edit the variables appropriately.
 ```
