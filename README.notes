@@ -1,0 +1,19 @@
+for updating readme.....
+
+clone repo
+create virtual enviroment:  python -m venv myGPT
+activate: source myGPT/bin/activate
+cd myGPT
+
+for GPU
+ensure you have latest cude tool kit installed (12.2 at time of writing) and the environments are correct: eg, export PATH=$PATH:/usr/local/cuda-12:/usr/local/cuda-12/bin
+
+pip install -r requirements.txt
+do:
+
+CMAKE_ARGS="-DLLAMA_CUBLAS=on -DCUDA_PATH=/usr/local/cuda-12.2 -DCUDAToolkit_ROOT=/usr/local/cuda-12.2 -DCUDAToolkit_INCLUDE_DIR=/usr/local/cuda-12/include -DCUDAToolkit_LIBRARY_DIR=/usr/local/cuda-12.2/lib64" FORCE_CMAKE=1  pip install llama-cpp-python --no-cache-dir --verbose
+
+model for testing:  koala-7B.ggmlv3.q2_K.bin
+for CPU
+
+as per below.......
