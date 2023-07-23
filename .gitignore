@@ -11,6 +11,7 @@ include/
 lib64
 pyvenv.cfg
 share/
+README.notes
 
 # Local Chroma db
 .chroma/

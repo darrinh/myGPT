@@ -1,19 +1,33 @@
-# privateGPT
+# myGPT
 Ask questions to your documents without an internet connection, using the power of LLMs. 100% private, no data leaves your execution environment at any point. You can ingest documents and ask questions without an internet connection!
 
 Built with [LangChain](https://github.com/hwchase17/langchain), [GPT4All](https://github.com/nomic-ai/gpt4all), [LlamaCpp](https://github.com/ggerganov/llama.cpp), [Chroma](https://www.trychroma.com/) and [SentenceTransformers](https://www.sbert.net/).
 
 <img width="902" alt="demo" src="https://user-images.githubusercontent.com/721666/236942256-985801c9-25b9-48ef-80be-3acbb4575164.png">
 
-# Environment Setup
+# Environment Setup for CPU
 In order to set your environment up to run the code here, first install all requirements:
 
 ```shell
 pip3 install -r requirements.txt
 ```
 
+# Environment Setup for GPU
+Note: The Cuda toolkit needs to be installed prior to running this commands.
+```shell
+pip3 install -r requirements.txt
+pip uninstall llama-cpp-python
+CMAKE_ARGS="-DLLAMA_CUBLAS=on" FORCE_CMAKE=1 pip install llama-cpp-python --no-cache-dir
+```
+
+If you have trouble with GPU support not being added, run the last command with '--verbose' to 
+see if its detecting you Cuda toolkit.
+
+
 Then, download the LLM model and place it in a directory of your choice:
-- LLM: default to [ggml-gpt4all-j-v1.3-groovy.bin](https://gpt4all.io/models/ggml-gpt4all-j-v1.3-groovy.bin). If you prefer a different GPT4All-J compatible model, just download it and reference it in your `.env` file.
+- LLM: for CPU inference [ggml-gpt4all-j-v1.3-groovy.bin](https://gpt4all.io/models/ggml-gpt4all-j-v1.3-groovy.bin). If you prefer a different GPT4All-J compatible model, just download it and reference it in your `.env` file.
+
+- LLM: for GPU inference [koala-7B.ggmlv3.q2_K.bin] (https://huggingface.co/TheBloke/koala-7B-GGML/blob/main/koala-7B.ggmlv3.q2_K.bin), If you prefer a differnt LLama Model, just download it and reference it in your '.env' file.
 
 Rename `example.env` to `.env` and edit the variables appropriately.
 ```
@@ -23,12 +37,13 @@ MODEL_PATH: Path to your GPT4All or LlamaCpp supported LLM
 MODEL_N_CTX: Maximum token limit for the LLM model
 EMBEDDINGS_MODEL_NAME: SentenceTransformers embeddings model name (see https://www.sbert.net/docs/pretrained_models.html)
 TARGET_SOURCE_CHUNKS: The amount of chunks (sources) that will be used to answer a question
+MODEL_N_GPU_LAYERS=100
 ```
 
 Note: because of the way `langchain` loads the `SentenceTransformers` embeddings, the first time you run the script it will require internet connection to download the embeddings model itself.
 
 ## Test dataset
-This repo uses a [state of the union transcript](https://github.com/imartinez/privateGPT/blob/main/source_documents/state_of_the_union.txt) as an example.
+This repo uses a [state of the union transcript](https://github.com/darrinh/myGPT/blob/main/source_documents/state_of_the_union.txt) as an example.
 
 ## Instructions for ingesting your own dataset
 
@@ -67,7 +82,7 @@ Loaded 1 new documents from source_documents
 Split into 90 chunks of text (max. 500 tokens each)
 Creating embeddings. May take some minutes...
 Using embedded DuckDB with persistence: data will be stored in: db
-Ingestion complete! You can now run privateGPT.py to query your documents
+Ingestion complete! You can now run myGPT.py to query your documents
 ```
 
 It will create a `db` folder containing the local vectorstore. Will take 20-30 seconds per document, depending on the size of the document.
@@ -80,7 +95,7 @@ Note: during the ingest process no data leaves your local environment. You could
 In order to ask a question, run a command like:
 
 ```shell
-python privateGPT.py
+python myGPT.py
 ```
 
 And wait for the script to require your input.
@@ -97,14 +112,14 @@ Type `exit` to finish the script.
 
 
 ### CLI
-The script also supports optional command-line arguments to modify its behavior. You can see a full list of these arguments by running the command ```python privateGPT.py --help``` in your terminal.
+The script also supports optional command-line arguments to modify its behavior. You can see a full list of these arguments by running the command ```python myGPT.py --help``` in your terminal.
 
 
 # How does it work?
 Selecting the right local models and the power of `LangChain` you can run the entire pipeline locally, without any data leaving your environment, and with reasonable performance.
 
 - `ingest.py` uses `LangChain` tools to parse the document and create embeddings locally using `HuggingFaceEmbeddings` (`SentenceTransformers`). It then stores the result in a local vector database using `Chroma` vector store.
-- `privateGPT.py` uses a local LLM based on `GPT4All-J` or `LlamaCpp` to understand questions and create answers. The context for the answers is extracted from the local vector store using a similarity search to locate the right piece of context from the docs.
+- `myGPT.py` uses a local LLM based on `GPT4All-J` or `LlamaCpp` to understand questions and create answers. The context for the answers is extracted from the local vector store using a similarity search to locate the right piece of context from the docs.
 - `GPT4All-J` wrapper was introduced in LangChain 0.0.162.
 
 # System Requirements
